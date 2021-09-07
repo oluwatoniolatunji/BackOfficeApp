@@ -1,0 +1,83 @@
+<nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold">UPLOAD METER READING</a>
+  </div>
+</nav>
+
+<div class="m-5">
+
+  <div class="card">
+    <div class="card-body">
+      <div class="mt-2 mb-3 w-50">
+        <input #formFile class="form-control" type="file" id="formFile" (change)="onFileSelected($event)">
+      </div>
+      <button type="button" class="btn btn-primary" (click)="onUpload()" [disabled]="!file || isLoading">
+        Upload Readings <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
+      </button> &nbsp;
+      <button type="button" class="btn btn-outline-danger text-right" (click)="onReset()" [disabled]="isLoading">
+        Clear Uploaded File <i class="fa fa-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="uploadResult">
+    <div class="col-lg">
+      <div class="card mt-2">
+        <div class="card-header fw-bold">
+          SUCCESSFUL UPLOADS
+        </div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Account Id</th>
+                <th scope="col">Meter Reading Date Time</th>
+                <th scope="col">Meter Read Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="!uploadResult.successfulReadings.length">
+                <td colspan="3"><i class="fa fa-info-circle"></i> There are no successful uploads</td>
+              </tr>
+              <tr *ngFor="let m of uploadResult.successfulReadings">
+                <td>{{m.accountId}}</td>
+                <td>{{m.meterReadingDateTime | date }}</td>
+                <td>{{m.meterReadValue}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg">
+      <div class="card mt-2">
+        <div class="card-header fw-bold">
+          FAILED UPLOADS
+        </div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Account Id</th>
+                <th scope="col">Meter Reading Date Time</th>
+                <th scope="col">Meter Read Value</th>
+                <th scope="col">Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="!uploadResult.failedReadings.length">
+                <td colspan="3"><i class="fa fa-info-circle"></i> There are no failed uploads</td>
+              </tr>
+              <tr *ngFor="let m of uploadResult.failedReadings">
+                <td>{{m.accountId}}</td>
+                <td>{{m.meterReadingDateTime | date:'d/MM/yyyy hh:mm:ss'}}</td>
+                <td>{{m.meterReadValue}}</td>
+                <td class="text-danger">{{m.uploadErrorMessage}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
